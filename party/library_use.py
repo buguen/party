@@ -8,7 +8,7 @@ import os
 import json
 
 from templating import reconstruct_script_code_template, render
-from rules_checking import check_library_json
+from library_checking import check_library_json_rules
 
 
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ def generate_all_scripts(preview=False):
             json_filename_ = os.path.join(item[0], "library.json")
             logger.info("Library filename : %s" % json_filename_)
             logger.info("Checking the rules for the library JSON ...")
-            ok, errors = check_library_json(json_filename=json_filename_)
+            ok, errors = check_library_json_rules(json_filename=json_filename_)
             if ok:
                 logger.info("... done. Rules are OK")
                 logger.info("Creating the Python scripts from the library "

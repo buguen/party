@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-r"""Functions that check the consistency of a library against the rules
-defined in the 'rules' field of the library
-"""
+r"""Parts library checks"""
 
 import json
 import logging
@@ -12,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def check_library_json(json_filename):
+def check_library_json_rules(json_filename):
     r"""Check that the entries in the 'data' field of a library respect the
     rules defined in the 'rules' field of the library
 

@@ -7,7 +7,7 @@ r"""Script that creates the library.json file for the ISO 4014 standard"""
 import logging
 from party.library_creation import template_handle_generators, \
     template_handle_aliases
-from party.rules_checking import check_library_json
+from party.library_checking import check_library_json_rules
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     logger.info("... done")
 
     logger.info("Checking the rules for the library JSON ...")
-    ok, errors = check_library_json(json_filename='library.json')
+    ok, errors = check_library_json_rules(json_filename='library.json')
     if ok:
         logger.info("... done. Rules are OK")
     else:

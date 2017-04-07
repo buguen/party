@@ -6,13 +6,13 @@ r"""Tests for rules_checking.py"""
 import os
 import pytest
 
-from party.rules_checking import check_library_json
+from party.library_checking import check_library_json_rules
 
 
 def test_rules_checking_happy_path():
     json_file = os.path.join(os.path.dirname(__file__),
                              "./json_files/good_library.json" )
-    ok, errors = check_library_json(json_file)
+    ok, errors = check_library_json_rules(json_file)
     assert ok is True
     assert errors == {}
 
@@ -20,7 +20,7 @@ def test_rules_checking_happy_path():
 def test_rules_checking_negative_weight():
     json_file = os.path.join(os.path.dirname(__file__),
                              "./json_files/library_negative_weight.json")
-    ok, errors = check_library_json(json_file)
+    ok, errors = check_library_json_rules(json_file)
     assert ok is False
     assert len(errors) == 1
     assert len(errors["608ZZ"]) == 1
@@ -29,7 +29,7 @@ def test_rules_checking_negative_weight():
 def test_rules_checking_negative_weight_s():
     json_file = os.path.join(os.path.dirname(__file__),
                              "./json_files/library_negative_weight_s.json")
-    ok, errors = check_library_json(json_file)
+    ok, errors = check_library_json_rules(json_file)
     assert ok is False
     assert len(errors) == 2
     assert len(errors["624ZZ"]) == 1
@@ -44,7 +44,7 @@ def test_rules_checking_many_errors():
     """
     json_file = os.path.join(os.path.dirname(__file__),
                              "./json_files/library_many_errors.json")
-    ok, errors = check_library_json(json_file)
+    ok, errors = check_library_json_rules(json_file)
     assert ok is False
     assert len(errors) == 2
     assert len(errors["624ZZ"]) == 2
@@ -60,7 +60,7 @@ def test_rules_checking_rules_definition_error():
     json_file = os.path.join(os.path.dirname(__file__),
                              "./json_files/library_wrong_rules.json")
     with pytest.raises(NameError):
-        _, _ = check_library_json(json_file)
+        _, _ = check_library_json_rules(json_file)
 
 
 def test_rules_checking_rules_syntax_error():
@@ -72,4 +72,4 @@ def test_rules_checking_rules_syntax_error():
     json_file = os.path.join(os.path.dirname(__file__),
                              "./json_files/library_wrong_rules_syntax.json")
     with pytest.raises(SyntaxError):
-        _, _ = check_library_json(json_file)
+        _, _ = check_library_json_rules(json_file)
