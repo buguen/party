@@ -4,7 +4,7 @@
 r"""Tests for the scripts_checking module"""
 
 import pytest
-from os.path import join, dirname
+from os.path import join, dirname, isdir
 from party.scripts_checking import check_script, check_all_scripts_from_library_jsons
 
 
@@ -15,7 +15,9 @@ def test_check_all_scripts_lib_ok():
 
 def test_check_all_scripts_lib_missing():
     r"""A script that should have been generated is missing"""
-    ok, all_errors = check_all_scripts_from_library_jsons(join(dirname(__file__), "scripts/sample_lib_missing"))
+    missing_part_folder = join(dirname(__file__), "scripts/sample_lib_missing")
+    assert isdir(missing_part_folder)
+    ok, all_errors = check_all_scripts_from_library_jsons(missing_part_folder)
     assert ok is False
     assert len(all_errors.keys()) == 1
 

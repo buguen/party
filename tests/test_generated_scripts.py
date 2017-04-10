@@ -24,18 +24,13 @@ def test_generated_scripts_from_scripts_folder_content():
 
     """
     # Find the scripts directories
-    for item in os.walk(os.path.join(os.path.dirname(__file__), "..")):
-        if item[0].endswith("scripts"):
-            for f in os.listdir(item[0]):
-                if os.path.splitext(f)[-1] == ".py":  # only py extensions
-                    script_ok, errors = check_script(f)
-                    assert script_ok is True
-                    # mod = imp.load_source(f, os.path.join(item[0], f))
-                    # assert mod.part is not None
-                    # assert not mod.part.shape.IsNull()
-                    # assert isinstance(mod.part, Solid)
-                    # assert mod.anchors is not None
-                    # assert isinstance(mod.anchors, dict)
+    test_scripts_folder = os.path.join(os.path.dirname(__file__), "../scripts")
+    for item in os.walk(test_scripts_folder):
+        # if item[0].endswith("scripts"):
+        for f in os.listdir(item[0]):
+            if os.path.splitext(f)[-1] == ".py":  # only py extensions
+                script_ok, errors = check_script(f)
+                assert script_ok is True
 
 
 @pytest.mark.skip("Unskip when the metric screws are properly implemented")
@@ -55,11 +50,3 @@ def test_generated_scripts_from_json():
             for name, context_ in json_file_content["data"].items():
                     script_ok, errors = check_script(os.path.join(item[0], "scripts/%s.py" % name))
                     assert script_ok is True
-                    # mod = imp.load_source("",
-                    #                       os.path.join(item[0],
-                    #                                    "scripts/%s.py" % name))
-                    # assert mod.part is not None
-                    # assert not mod.part.shape.IsNull()
-                    # assert isinstance(mod.part, Solid)
-                    # assert mod.anchors is not None
-                    # assert isinstance(mod.anchors, dict)

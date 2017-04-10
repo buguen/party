@@ -35,7 +35,6 @@ def check_script(script_path):
 
     script_ok = True
     errors = list()
-
     mod = imp.load_source(script_path, script_path)
 
     # part variable checks
@@ -86,19 +85,22 @@ def check_all_scripts_from_library_jsons(folder_path):
     scripts_ok = True
     all_errors = dict()
 
+    # TODO : raise an error if no library in subfolders structure
     for item in os.walk(folder_path):
         if "library.json" in item[2]:
             with open("%s/%s" % (item[0], "library.json")) as data_file:
                 json_file_content = json.load(data_file)
 
-            for name, context_ in json_file_content["data"].items():
+            for part_id, context_ in json_file_content["data"].items():
                 try:
-                    script_ok, errors = check_script(os.path.join(item[0], "scripts/%s.py" % name))
+                    script_path = os.path.join(item[0], "scripts/%s.py" % part_id)
+                    script_ok, errors = check_script(script_path)
                     if script_ok is False:
                         scripts_ok = False
-                        all_errors["%s/%s" % (item[0], "library.json")] = {name: errors}
+                        all_errors["%s/%s" % (item[0], "library.json")] = {part_id: errors}
                 except IOError:
                     scripts_ok = False
-                    all_errors["%s/%s" % (item[0], "library.json")] = {name: "No script for %s" % name}
+                    all_errors["%s/%s" % (item[0], "library.json")] = \
+                        {part_id: "No script for %s" % part_id}
 
     return scripts_ok, all_errors
