@@ -27,6 +27,64 @@ from templating import render, to_json_string
 logger = logging.getLogger(__name__)
 
 
+def _analyze_template(template_file):
+    r"""Analyze a parts library template file for certain features and report
+    on their presence
+
+    Parameters
+    ----------
+    template_file : str
+        Path to the template file
+
+    Returns
+    -------
+    dict : keys are features, values are bool (True if feature is present)
+
+    """
+
+    info = {"generators": False, "aliases": False}
+
+    with open(template_file) as f:
+        content = f.readlines()
+
+    for line in content:
+        if "{{generators}}" in line or "{{ generators }}" in line:
+            info["generators"] = True
+
+        if "__alias__" in line:
+            info["aliases"] = True
+
+    return info
+
+
+def autocreate_library(template_file):
+    r"""AUtomated parts library creation from a template file. The template
+    processing is automated depending on the presence of certain features in
+    the template
+
+    Parameters
+    ----------
+    template_file : str
+        Path to the template file
+
+    """
+    info = _analyze_template(template_file)
+    logger.info("template file has generators tag : %s" % str(info["generators"]))
+    logger.info("template file has aliases : %s" % str(info["aliases"]))
+
+    template_folder = os.path.dirname(template_file)
+    tmp_path = os.path.join(template_folder, "tmp.json")
+    final_path = os.path.join(template_folder, "library.json")
+
+    if info["generators"] is True:
+        template_handle_generators(template_file, tmp_path)
+        if info["aliases"] is True:
+            template_handle_aliases(tmp_path, final_path)
+    else:
+        if info["aliases"] is True:
+            template_handle_aliases(template_file, final_path)
+
+
 def template_handle_aliases(file_in, file_out):
     r"""Replace aliases found in a template file by the values they refer to
 

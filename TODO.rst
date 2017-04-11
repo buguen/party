@@ -4,7 +4,7 @@
 
 ******** units management : list in units section of JSON
 
-Automate library.json generation based on the contents of the input file (contains {{ generators }}, aliases, __alias__
+******** Automate library.json generation based on the contents of the input file (contains {{ generators }}, aliases, __alias__
 
 ******** STEP, STL and HTML generation should be possible (but not automatic)
 
