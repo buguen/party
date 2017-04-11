@@ -3,9 +3,12 @@
     "name": "iso4014-screws-library",
     "description": "ISO 4014 Screws library",
     "units": {
-      "length": "mm",
-      "force": "N",
-      "weight": "g"
+      "length": ["mm", ["p", "b_ref_b", "b_ref_c", "b_ref_d", "c_max", "c_min",
+        "d_a", "d_s_max", "l_f_max", "k_nominal", "r_min", "s_max", "d_s_min",
+        "d_w_min", "e", "k_max", "k_min", "k_w_e_min", "s_min", "l_min", "l_max",
+        "l_s_min", "l_g_max"]],
+      "force": ["N", []],
+      "weight": ["g", []]
     },
     "authors": ["Guillaume Florent", "Thomas Paviot", "Bernard Uguen"],
     "url": "https://github.com/guillaume-florent/standard-cad-parts/parts/fasteners/screws/ISO_4014",

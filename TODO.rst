@@ -1,12 +1,12 @@
 ******** Move generated files tests from 'tests' to a function that can be used by library creators
 
-Migrate issues from standard-cad-parts
+******** Migrate issues from standard-cad-parts
 
-units management : list in units section of JSON
+******** units management : list in units section of JSON
 
 Automate library.json generation based on the contents of the input file (contains {{ generators }}, aliases, __alias__
 
--> STEP, STL and HTML generation should be possible (but not automatic)
+******** STEP, STL and HTML generation should be possible (but not automatic)
 
 create an HTML file that allows querying the library?
 
@@ -35,3 +35,4 @@ Clean standard-cad-parts from useless code
 
 More library checks ?
   Metadata is the same for each part
+  ******** Check units are coherent (every field linked to a unit)

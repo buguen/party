@@ -61,3 +61,82 @@ def check_library_json_rules(json_filename):
                 logger.error("Library data definition error")
 
     return library_ok, errors
+
+
+def check_library_units_definition(json_filename):
+    r"""Test that each field of a data entry is referenced in the 'units'
+    section of the library.json file
+
+    Parameters
+    ----------
+    json_filename : str
+        Path to the JSON file that describes the parts library
+
+    Returns
+    -------
+    tuple(bool, errors)
+        bool : True if the library is OK, False otherwise
+        errors : dict (keys: part_identifier, values: list of broken rules)
+
+    """
+
+    library_ok = True
+    errors = dict()
+
+    fields = list()
+
+    with open(json_filename) as data_file:
+        json_file_content = json.load(data_file)
+
+    for unit, definition in json_file_content["metadata"]["units"].items():
+        for field in definition[1]:
+            if field not in fields:
+                fields.append(field)
+            else:
+                library_ok = False
+                if "units definition" not in errors.keys():
+                    errors["units definition"] = list()
+                errors["units definition"].append("field '%s' is duplicated" % str(field))
+
+    for part_id, part_values in json_file_content["data"].items():
+        for dict_entry_key in part_values.keys():
+            if dict_entry_key in fields or \
+                            dict_entry_key in ["description", "generator"]:
+                pass
+            else:
+                library_ok = False
+                if part_id not in errors.keys():
+                    errors[part_id] = list()
+                errors[part_id].append("field '%s' not defined in units" % dict_entry_key)
+                logger.error("Library data definition error")
+
+    return library_ok, errors
+
+
+def check_all(json_filename):
+    r"""Perform every possible test on the library
+
+    Parameters
+    ----------
+    json_filename : str
+        Path to the JSON file that describes the parts library
+
+    Returns
+    -------
+    tuple(bool, errors)
+        bool : True if the library is OK, False otherwise
+        errors : dict (keys: part_identifier, values: list of broken rules)
+
+    """
+    ok_rules, errors_rules = check_library_json_rules(json_filename)
+    ok_units, errors_units = check_library_units_definition(json_filename)
+
+    return [ok_rules, ok_units], [errors_rules, errors_units]
+
+if __name__ == "__main__":
+    import os
+
+    library_ok, errors = check_library_units_definition(os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/library.json"))
+
+    print(library_ok)
+    print(errors)
