@@ -15,10 +15,11 @@ materials
 signature
 
 'include' library creation mechanism
+  impact on the autocreation
 
 Doc !!
 
-Skeleton generation from name : generate folder + 'generators' subfolder + library_template.py
+******** Skeleton generation from name : generate folder + 'generators' subfolder + library_template.py
 
 Try to replace:
 

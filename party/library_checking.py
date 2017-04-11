@@ -132,11 +132,3 @@ def check_all(json_filename):
     ok_units, errors_units = check_library_units_definition(json_filename)
 
     return [ok_rules, ok_units], [errors_rules, errors_units]
-
-if __name__ == "__main__":
-    import os
-
-    library_ok, errors = check_library_units_definition(os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/library.json"))
-
-    print(library_ok)
-    print(errors)
