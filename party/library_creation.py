@@ -185,6 +185,7 @@ def autocreate_library(template_file):
         if info["aliases"] is True:
             template_handle_generators(template_file, tmp_path)
             template_handle_aliases(tmp_path, final_path)
+            os.remove(tmp_path)
         else:
             template_handle_generators(template_file, final_path)
     else:
