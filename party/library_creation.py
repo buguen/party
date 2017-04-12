@@ -161,7 +161,7 @@ def _analyze_template(template_file):
     return info
 
 
-def autocreate_library(template_file):
+def autocreate_library(template_file, delete_intermediate=True):
     r"""Automated parts library creation from a template file. The template
     processing is automated depending on the presence of certain features in
     the template
@@ -170,6 +170,8 @@ def autocreate_library(template_file):
     ----------
     template_file : str
         Path to the template file
+    delete_intermediate : bool, optional (default is True)
+        Should the intermediate files for library creation be deleted
 
     """
     info = _analyze_template(template_file)
@@ -185,7 +187,8 @@ def autocreate_library(template_file):
         if info["aliases"] is True:
             template_handle_generators(template_file, tmp_path)
             template_handle_aliases(tmp_path, final_path)
-            os.remove(tmp_path)
+            if delete_intermediate is True:
+                os.remove(tmp_path)
         else:
             template_handle_generators(template_file, final_path)
     else:
