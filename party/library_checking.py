@@ -113,6 +113,57 @@ def check_library_units_definition(json_filename):
     return library_ok, errors
 
 
+def check_library_fields(json_filename):
+    r"""Check that every entry in the 'data' section if the library JSON
+    file has the same fields (order does not matter)
+
+    Parameters
+    ----------
+    json_filename : str
+        Path to the JSON file that describes the parts library
+
+    Returns
+    -------
+    tuple(bool, errors)
+        bool : True if the library is OK, False otherwise
+        errors : dict (keys: part_identifier, values: list of broken rules)
+
+    """
+    library_ok = True
+    errors = dict()
+
+    reference_set_of_fields = set()
+
+    with open(json_filename) as data_file:
+        json_file_content = json.load(data_file)
+
+    # Populate the reference set of fields
+    feed = True  # Hackish way to only consider the first dictionnary entry
+    for part_id, part_values in json_file_content["data"].items():
+        if feed is True:
+            for dict_entry_key in part_values.keys():
+                reference_set_of_fields.add(dict_entry_key)
+        feed = False
+
+    logger.info("Reference set of fields : %s" % str(reference_set_of_fields))
+
+    # Check the set of fields in the data section
+    # against the reference set of fields
+    for part_id, part_values in json_file_content["data"].items():
+        current_set_of_fields = set()
+        for dict_entry_key in part_values.keys():
+            current_set_of_fields.add(dict_entry_key)
+        if current_set_of_fields == reference_set_of_fields:
+            pass
+        else:
+            library_ok = False
+            current_minus_ref = current_set_of_fields.difference(reference_set_of_fields)
+            ref_minus_current = reference_set_of_fields.difference(current_set_of_fields)
+            errors[part_id] = current_minus_ref.union(ref_minus_current)
+
+    return library_ok, errors, reference_set_of_fields
+
+
 def check_all(json_filename):
     r"""Perform every possible test on the library
 
@@ -130,5 +181,20 @@ def check_all(json_filename):
     """
     ok_rules, errors_rules = check_library_json_rules(json_filename)
     ok_units, errors_units = check_library_units_definition(json_filename)
+    ok_fields, errors_fields, _ = check_library_fields(json_filename)
 
-    return [ok_rules, ok_units], [errors_rules, errors_units]
+    return ([ok_rules, ok_units, ok_fields],
+            [errors_rules, errors_units, errors_fields])
+
+
+if __name__ == "__main__":
+    import os
+
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s :: %(levelname)6s :: '
+                               '%(module)20s :: %(lineno)3d :: %(message)s')
+
+    ok, err = check_library_fields(os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/library.json"))
+
+    print(ok)
+    print(err)

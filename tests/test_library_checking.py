@@ -7,7 +7,7 @@ import os
 import pytest
 
 from party.library_checking import check_library_json_rules,\
-    check_library_units_definition
+    check_library_units_definition, check_library_fields
 
 
 # Rules checking related tests
@@ -115,3 +115,31 @@ def test_missing_units_definition():
     ok, errors = check_library_units_definition(json_file)
     assert ok is False
     assert len(errors) == 1
+
+
+# fields related tests
+
+
+def test_good_fields_definition():
+    r"""All fields are identical for each entry in data"""
+    json_file = os.path.join(os.path.dirname(__file__),
+                             "./json_files/good_library.json")
+    ok, errors, _ = check_library_fields(json_file)
+    assert ok is True
+    assert len(errors) == 0
+
+
+def test_missing_field():
+    r"""Flange dimensions are not present for plain bearings"""
+    json_file = os.path.join(os.path.dirname(__file__),
+                             "./json_files/library_missing_field.json")
+    ok, errors, ref = check_library_fields(json_file)
+    assert ok is False
+
+    # assuming the flanged bearing is used for reference building
+    assert len(ref) == 10
+    assert len(errors) == 2
+    assert "608ZZ" in errors
+    assert "624ZZ" in errors
+    assert errors["624ZZ"] == set(["flange_diameter", "flange_thickness"])
+    assert errors["608ZZ"] == set(["flange_diameter", "flange_thickness"])

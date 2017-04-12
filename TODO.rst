@@ -35,5 +35,9 @@ Strict nomenclature enforcement : where are we?
 Clean standard-cad-parts from useless code
 
 More library checks ?
-  Metadata is the same for each part
+  ******** Metadata is the same for each part (the list of fields is also returned)
   ******** Check units are coherent (every field linked to a unit)
+
+API:
+  add field
+  remove field
