@@ -28,6 +28,14 @@ logger = logging.getLogger(__name__)
 
 
 def create_skeleton(base_folder):
+    r"""Create a skeleton for a parts library project
+
+    Parameters
+    ----------
+    base_folder : str
+        The path to the base folder of the library
+
+    """
 
     folder_name = os.path.basename(base_folder)
 
@@ -39,8 +47,10 @@ def create_skeleton(base_folder):
     if not os.path.isdir(generators_folder_path):
         os.mkdir(generators_folder_path)
 
-    sample_generator_path = os.path.join(generators_folder_path, "%s.py" % folder_name)
-    sample_library_template_path = os.path.join(base_folder, "library_template.json")
+    sample_generator_path = os.path.join(generators_folder_path, "%s.py" %
+                                         folder_name)
+    sample_library_template_path = os.path.join(base_folder,
+                                                "library_template.json")
     sample_create_path = os.path.join(base_folder, "create_library.py")
     sample_use_path = os.path.join(base_folder, "use_library.py")
 
@@ -53,8 +63,10 @@ def create_skeleton(base_folder):
         gen.write("length = {{ length }}\n")
         gen.write("\n")
         gen.write("part = cylinder(radius, length)\n")
-        gen.write('anchors = {1: {"position": (0., 0., 0.), "direction": (0., 0., -1.)},\n')
-        gen.write('           2: {"position": (0., 0., length), "direction": (0., 0., 1.)}}\n')
+        gen.write('anchors = {1: {"position": (0., 0., 0.), '
+                  '"direction": (0., 0., -1.)},\n')
+        gen.write('           2: {"position": (0., 0., length), '
+                  '"direction": (0., 0., 1.)}}\n')
 
     with open(sample_library_template_path, 'w') as template:
         template.write("{\n")
@@ -94,7 +106,8 @@ def create_skeleton(base_folder):
         create.write("#!/usr/bin/python\n")
         create.write("# coding: utf-8\n")
         create.write("\n")
-        create.write('r"""Script that creates the library.json file for the %s"""\n' % folder_name)
+        create.write('r"""Script that creates the library.json file for '
+                     'the %s"""\n' % folder_name)
         create.write("\n")
         create.write("import logging\n")
         create.write("\n")
@@ -102,8 +115,10 @@ def create_skeleton(base_folder):
         create.write("from party.library_checking import check_all\n")
         create.write("\n")
         create.write("logging.basicConfig(level=logging.DEBUG,\n")
-        create.write("                    format='%(asctime)s :: %(levelname)6s :: '\n")
-        create.write("                           '%(module)20s :: %(lineno)3d :: %(message)s')\n")
+        create.write("                    format='%(asctime)s :: %"
+                     "(levelname)6s :: '\n")
+        create.write("                           '%(module)20s :: %(lineno)3d "
+                     ":: %(message)s')\n")
         create.write("\n")
         create.write('autocreate_library("library_template.json")\n')
         create.write('library_ok_list, _ = check_all("library.json")\n')
@@ -114,7 +129,8 @@ def create_skeleton(base_folder):
         use.write("#!/usr/bin/python\n")
         use.write("# coding: utf-8\n")
         use.write("\n")
-        use.write('r"""Example use of the library.json file to create geometry_scripts \n')
+        use.write('r"""Example use of the library.json file to create '
+                  'geometry_scripts \n')
         use.write('and cad files"""\n')
         use.write("\n")
         use.write("import logging\n")
@@ -124,11 +140,15 @@ def create_skeleton(base_folder):
         use.write("\n")
         use.write("\n")
         use.write("logging.basicConfig(level=logging.DEBUG,\n")
-        use.write("                    format='%(asctime)s :: %(levelname)6s :: '\n")
-        use.write("                           '%(module)20s :: %(lineno)3d :: %(message)s')\n")
+        use.write("                    format='%(asctime)s :: %"
+                  "(levelname)6s :: '\n")
+        use.write("                           '%(module)20s :: %(lineno)3d :: %"
+                  "(message)s')\n")
         use.write("\n")
-        use.write('generate(json_library_filepath=join(dirname(__file__), "library.json"),\n')
-        use.write("         generate_steps=True, generate_stls=True, generate_htmls=True)\n")
+        use.write('generate(json_library_filepath=join(dirname(__file__), '
+                  '"library.json"),\n')
+        use.write("         generate_steps=True, generate_stls=True, "
+                  "generate_htmls=True)\n")
 
 
 def _analyze_template(template_file):
@@ -175,7 +195,8 @@ def autocreate_library(template_file, delete_intermediate=True):
 
     """
     info = _analyze_template(template_file)
-    logger.info("template file has generators tag : %s" % str(info["generators"]))
+    logger.info("template file has generators tag : %s" %
+                str(info["generators"]))
     logger.info("template file has aliases : %s" % str(info["aliases"]))
 
     template_folder = os.path.dirname(template_file)
