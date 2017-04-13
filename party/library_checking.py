@@ -153,6 +153,7 @@ def check_library_fields(json_filename):
         current_set_of_fields = set()
         for dict_entry_key in part_values.keys():
             current_set_of_fields.add(dict_entry_key)
+
         if current_set_of_fields == reference_set_of_fields:
             pass
         else:

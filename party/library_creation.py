@@ -216,6 +216,8 @@ def autocreate_library(template_file, delete_intermediate=True):
         if info["aliases"] is True:
             template_handle_aliases(template_file, final_path)
 
+    template_handle_nomenclature(final_path, final_path)
+
 
 def template_handle_aliases(file_in, file_out):
     r"""Replace aliases found in a template file by the values they refer to
@@ -244,7 +246,8 @@ def template_handle_aliases(file_in, file_out):
                     for alias_key, alias_value in \
                             json_aliases[key_in_aliases].items():
                         context_[alias_key] = alias_value
-                    del context_[k]  # do not keep the alias link
+                    # del context_[k]  # do not keep the alias link
+                    context_[k] = context_[k].replace("__alias__", "")
 
     del json_content["aliases"]
 
@@ -301,3 +304,41 @@ def has_aliases(d):
         if "__alias__" in str(v):
             has_alias = True
     return has_alias
+
+
+def template_handle_nomenclature(file_in, file_out):
+    r"""Replaces the part_ids by the nomenclature computed id
+
+    Parameters
+    ----------
+    file_in : str
+        Path to the input file
+        (i.e. a template containing a {{ generators )} tag)
+    file_out : str
+        The output file
+        (i.e. a template with replaced {{ generators }} tag or the final file)
+
+    """
+    with open(file_in) as fi:
+        json_content = json.load(fi, object_pairs_hook=OrderedDict)
+
+    try:
+        nomenclature_string = json_content["nomenclature"]
+
+        for part_id, part_values in json_content["data"].items():
+            for var, value in part_values.items():
+                if type(value) not in [str, unicode]:
+                    exec("%s = %s" % (var, value))
+                else:
+                    exec("%s = '%s'" % (var, value))
+            json_content["data"][eval(nomenclature_string)] = part_values
+            del json_content["data"][part_id]
+
+        with open(file_out, 'w') as fp:
+            json.dump(json_content, fp, sort_keys=False, indent=2)
+    except KeyError:
+        logger.warning("No nomenclature specified, using user input")
+
+if __name__ == '__main__':
+    template_handle_nomenclature(os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/library.json"),
+                                 os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/new_library.json"))

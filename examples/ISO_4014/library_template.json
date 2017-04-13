@@ -8,12 +8,14 @@
         "d_w_min", "e", "k_max", "k_min", "k_w_e_min", "s_min", "l_min", "l_max",
         "l_s_min", "l_g_max"]],
       "force": ["N", []],
-      "weight": ["g", []]
+      "weight": ["g", []],
+      "dimensionless": ["", ["threading", "generics", "grade_specifics"]]
     },
     "authors": ["Guillaume Florent", "Thomas Paviot", "Bernard Uguen"],
     "url": "https://github.com/guillaume-florent/standard-cad-parts/parts/fasteners/screws/ISO_4014",
     "license": "GPL v3"
   },
+  "nomenclature": "'ISO4014_' + threading + 'x' + str(int(l_max))",
   "generators":
     { {{ generators }} },
   "rules": [],

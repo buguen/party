@@ -17,30 +17,19 @@ if __name__ == "__main__":
                         format='%(asctime)s :: %(levelname)6s :: '
                                '%(module)20s :: %(lineno)3d :: %(message)s')
 
+    # library creation from template
     logger.info("Creating the library JSON from its template ...")
-
-    # template_handle_generators(file_in='library_template.json',
-    #                            file_out='library_template_.json')
-    #
-    # logger.info("... done")
-    #
-    # logger.info("Handling aliases in JSON template")
-    #
-    # template_handle_aliases(file_in='library_template_.json',
-    #                         file_out='library.json')
-    #
-    # logger.info("... done")
-    #
-    # logger.info("Checking the rules for the library JSON ...")
-    # ok, errors = check_library_json_rules(json_filename='library.json')
-    # if ok:
-    #     logger.info("... done. Rules are OK")
-    # else:
-    #     logger.error("The library contains errors, please correct these before "
-    #                  "generating the scripts")
-    #     print(errors)
-
     autocreate_library("library_template.json")
+    logger.info("...done")
+
+    # library checks
+    logger.info("Checking the library JSON  ...")
     library_ok_list, _ = check_all("library.json")
-    for entry in library_ok_list:
-        assert entry is True
+    ok = all(list_element is True for list_element in library_ok_list)
+    if ok is True:
+        logger.info("...done - All OK")
+    else:
+        logger.error("ERROR(S) in the library JSON")
+        logger.info("rules ok : %s" % str(library_ok_list[0]))
+        logger.info("units ok : %s" % str(library_ok_list[1]))
+        logger.info("fields ok : %s" % str(library_ok_list[2]))
