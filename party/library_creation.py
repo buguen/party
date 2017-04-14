@@ -181,7 +181,8 @@ def _analyze_template(template_file):
     return info
 
 
-def autocreate_library(template_file, delete_intermediate=True):
+def autocreate_library(template_file, library_file_name="library.json",
+                       delete_intermediate=True):
     r"""Automated parts library creation from a template file. The template
     processing is automated depending on the presence of certain features in
     the template
@@ -190,6 +191,8 @@ def autocreate_library(template_file, delete_intermediate=True):
     ----------
     template_file : str
         Path to the template file
+    library_file_name : str, optional (default is 'library.json')
+        Name of the final library file
     delete_intermediate : bool, optional (default is True)
         Should the intermediate files for library creation be deleted
 
@@ -201,7 +204,7 @@ def autocreate_library(template_file, delete_intermediate=True):
 
     template_folder = os.path.dirname(template_file)
     tmp_path = os.path.join(template_folder, "tmp.json")
-    final_path = os.path.join(template_folder, "library.json")
+    final_path = os.path.join(template_folder, library_file_name)
 
     if info["generators"] is True:
         # template_handle_generators(template_file, tmp_path)
