@@ -89,14 +89,20 @@ def check_library_units_definition(json_filename):
         json_file_content = json.load(data_file)
 
     for unit, definition in json_file_content["metadata"]["units"].items():
-        for field in definition[1]:
-            if field not in fields:
-                fields.append(field)
-            else:
-                library_ok = False
-                if "units definition" not in errors.keys():
-                    errors["units definition"] = list()
-                errors["units definition"].append("field '%s' is duplicated" % str(field))
+        try:
+            for field in definition[1]:
+                if field not in fields:
+                    fields.append(field)
+                else:
+                    library_ok = False
+                    if "units definition" not in errors.keys():
+                        errors["units definition"] = list()
+                    errors["units definition"].append("field '%s' is duplicated" % str(field))
+        except IndexError:
+            library_ok = False
+            if "units definition" not in errors.keys():
+                        errors["units definition"] = list()
+            errors["units definition"].append("Improperly defined units : %s " % str(unit))
 
     for part_id, part_values in json_file_content["data"].items():
         for dict_entry_key in part_values.keys():
