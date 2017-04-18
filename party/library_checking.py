@@ -49,16 +49,23 @@ def check_library_json_rules(json_filename):
         for rule in json_file_content["rules"]:
             instruction = "bool_ = %s" % rule
             # logger.info("Checking '%s' for part %s" % (rule, part_id))
-            exec instruction
-            if bool_ is True:
-                # logger.info("OK")
-                pass
-            else:
+            try:
+                exec instruction
+                if bool_ is True:
+                    # logger.info("OK")
+                    pass
+                else:
+                    library_ok = False
+                    if part_id not in errors.keys():
+                        errors[part_id] = list()
+                    errors[part_id].append(rule)
+                    logger.error("Library data definition error")
+            except NameError:
                 library_ok = False
                 if part_id not in errors.keys():
                     errors[part_id] = list()
                 errors[part_id].append(rule)
-                logger.error("Library data definition error")
+                logger.error("Rules definition error (NameError)")
 
     return library_ok, errors
 
@@ -186,22 +193,20 @@ def check_all(json_filename):
         errors : dict (keys: part_identifier, values: list of broken rules)
 
     """
+    logger.info("Checking the library %s  ..." % json_filename)
     ok_rules, errors_rules = check_library_json_rules(json_filename)
     ok_units, errors_units = check_library_units_definition(json_filename)
     ok_fields, errors_fields, _ = check_library_fields(json_filename)
 
+    ok = all(list_element is True for list_element in [ok_rules, ok_units, ok_fields])
+
+    if ok is True:
+        logger.info("...done - All OK")
+    else:
+        logger.error("ERROR(S) in the library %s" % json_filename)
+        logger.info("rules ok : %s" % str(ok_rules))
+        logger.info("units ok : %s" % str(ok_units))
+        logger.info("fields ok : %s" % str(ok_fields))
+
     return ([ok_rules, ok_units, ok_fields],
             [errors_rules, errors_units, errors_fields])
-
-
-if __name__ == "__main__":
-    import os
-
-    logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s :: %(levelname)6s :: '
-                               '%(module)20s :: %(lineno)3d :: %(message)s')
-
-    ok, err = check_library_fields(os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/library.json"))
-
-    print(ok)
-    print(err)

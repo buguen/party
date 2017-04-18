@@ -18,9 +18,7 @@ if __name__ == "__main__":
                                '%(module)20s :: %(lineno)3d :: %(message)s')
 
     # library creation from template
-    logger.info("Creating the library JSON from its template ...")
     autocreate_library("library_template.json")
-    logger.info("...done")
 
     # library checks
     logger.info("Checking the library JSON  ...")

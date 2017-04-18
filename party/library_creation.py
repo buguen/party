@@ -197,6 +197,7 @@ def autocreate_library(template_file, library_file_name="library.json",
         Should the intermediate files for library creation be deleted
 
     """
+    logger.info("Creating the library %s from its template ..." % library_file_name)
     info = _analyze_template(template_file)
     logger.info("template file has generators tag : %s" %
                 str(info["generators"]))
@@ -204,7 +205,8 @@ def autocreate_library(template_file, library_file_name="library.json",
 
     template_folder = os.path.dirname(template_file)
     tmp_path = os.path.join(template_folder, "tmp.json")
-    final_path = os.path.join(template_folder, library_file_name)
+    # final_path = os.path.join(template_folder, library_file_name)
+    final_path = library_file_name
 
     if info["generators"] is True:
         # template_handle_generators(template_file, tmp_path)
@@ -220,6 +222,8 @@ def autocreate_library(template_file, library_file_name="library.json",
             template_handle_aliases(template_file, final_path)
 
     template_handle_nomenclature(final_path, final_path)
+
+    logger.info("...done")
 
 
 def template_handle_aliases(file_in, file_out):
@@ -275,12 +279,15 @@ def template_handle_generators(file_in, file_out):
     # Deal with generator code
     generators = dict()
 
+    generators_folder = os.path.join(os.path.dirname(file_in), "generators")
+
     # iterate over the files in the templates folder
-    for generator_file in os.listdir("generators"):
+    for generator_file in os.listdir(generators_folder):
         # use the file name without extension as the generator id
         generator_id = os.path.splitext(generator_file)[0]
 
-        with open("generators/%s" % generator_file) as gf:
+        # with open("generators/%s" % generator_file) as gf:
+        with open(os.path.join(generators_folder, generator_file)) as gf:
             generators[generator_id] = gf.readlines()
 
     context = dict()
