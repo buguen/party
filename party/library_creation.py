@@ -333,7 +333,7 @@ def template_handle_nomenclature(file_in, file_out):
         json_content = json.load(fi, object_pairs_hook=OrderedDict)
 
     try:
-        nomenclature_string = json_content["nomenclature"]
+        nomenclature_string = json_content["metadata"]["nomenclature"]
 
         for part_id, part_values in json_content["data"].items():
             for var, value in part_values.items():
@@ -341,14 +341,13 @@ def template_handle_nomenclature(file_in, file_out):
                     exec("%s = %s" % (var, value))
                 else:
                     exec("%s = '%s'" % (var, value))
-            json_content["data"][eval(nomenclature_string)] = part_values
-            del json_content["data"][part_id]
+            if part_id != eval(nomenclature_string):
+                json_content["data"][eval(nomenclature_string)] = part_values
+                del json_content["data"][part_id]
+            else:
+                pass  # do nothing, everything is fine
 
         with open(file_out, 'w') as fp:
             json.dump(json_content, fp, sort_keys=False, indent=2)
     except KeyError:
         logger.warning("No nomenclature specified, using user input")
-
-if __name__ == '__main__':
-    template_handle_nomenclature(os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/library.json"),
-                                 os.path.join(os.path.dirname(__file__), "../examples/ISO_4014/new_library.json"))

@@ -2,6 +2,7 @@
   "metadata":{
     "name": "iso4014-screws-library",
     "description": "ISO 4014 Screws library",
+    "nomenclature": "'ISO4014_' + threading + 'x' + str(int(l_max))",
     "units": {
       "length": ["mm", ["p", "b_ref_b", "b_ref_c", "b_ref_d", "c_max", "c_min",
         "d_a", "d_s_max", "l_f_max", "k_nominal", "r_min", "s_max", "d_s_min",
@@ -15,7 +16,6 @@
     "url": "https://github.com/guillaume-florent/standard-cad-parts/parts/fasteners/screws/ISO_4014",
     "license": "GPL v3"
   },
-  "nomenclature": "'ISO4014_' + threading + 'x' + str(int(l_max))",
   "generators":
     { {{ generators }} },
   "rules": [],
