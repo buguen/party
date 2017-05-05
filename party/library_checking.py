@@ -171,8 +171,10 @@ def check_library_fields(json_filename):
             pass
         else:
             library_ok = False
-            current_minus_ref = current_set_of_fields.difference(reference_set_of_fields)
-            ref_minus_current = reference_set_of_fields.difference(current_set_of_fields)
+            current_minus_ref = current_set_of_fields.difference(
+                reference_set_of_fields)
+            ref_minus_current = reference_set_of_fields.difference(
+                current_set_of_fields)
             errors[part_id] = current_minus_ref.union(ref_minus_current)
 
     return library_ok, errors, reference_set_of_fields
