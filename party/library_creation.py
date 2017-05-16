@@ -21,7 +21,7 @@ import logging
 
 from collections import OrderedDict
 
-from templating import render, to_json_string
+from party.templating import render, to_json_string
 
 
 logger = logging.getLogger(__name__)
@@ -224,6 +224,33 @@ def autocreate_library(template_file, library_file_name="library.json",
     template_handle_nomenclature(final_path, final_path)
 
     logger.info("...done")
+
+
+def template_handle_includes(file_in, file_out):
+    r"""Replace includes found in a template file by the values they refer to
+
+    Parameters
+    ----------
+    file_in : str
+        Path to the input file (i.e. a template using includes)
+    file_out : str
+        The output file
+        (i.e. a template with replaced includes or the final file)
+
+    """
+    with open(file_in) as fi:
+        json_content = json.load(fi, object_pairs_hook=OrderedDict)
+
+    json_includes = json_content["includes"]
+
+    # Read the files declared in the includes
+
+    # Create aliases from these files
+
+    # Write the output file
+
+    # with open(file_out, 'w') as fp:
+    #     json.dump(json_content, fp, sort_keys=False, indent=2)
 
 
 def template_handle_aliases(file_in, file_out):

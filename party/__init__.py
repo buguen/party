@@ -14,7 +14,8 @@ from __future__ import unicode_literals
 __name__ = "party"
 __description__ = "API code for parts libraries"
 
-__version__ = "0.0.1"
+__version__ = "0.1"
+__release__ = "0.1.0"
 __author__ = "Guillaume Florent, Thomas Paviot, Bernard Uguen"
 __author_email__ = "florentsailing@gmail.com"
 __license__ = 'GPL v3'

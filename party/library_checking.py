@@ -44,13 +44,13 @@ def check_library_json_rules(json_filename):
                 instruction = "%s = %s" % (dict_entry_key, dict_entry_value)
             else:
                 instruction = "%s = '%s'" % (dict_entry_key, dict_entry_value)
-            exec instruction
+            exec(instruction)
 
         for rule in json_file_content["rules"]:
             instruction = "bool_ = %s" % rule
             # logger.info("Checking '%s' for part %s" % (rule, part_id))
             try:
-                exec instruction
+                exec(instruction)
                 if bool_ is True:
                     # logger.info("OK")
                     pass

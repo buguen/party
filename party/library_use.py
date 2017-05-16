@@ -8,8 +8,8 @@ import logging
 import os
 import json
 
-from templating import reconstruct_script_code_template, render
-from library_checking import check_library_json_rules
+from party.templating import reconstruct_script_code_template, render
+from party.library_checking import check_library_json_rules
 
 
 logger = logging.getLogger(__name__)
